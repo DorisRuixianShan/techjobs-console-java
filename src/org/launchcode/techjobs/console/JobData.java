@@ -8,8 +8,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+
 
 /**
  * Created by LaunchCode
@@ -71,10 +73,13 @@ public class JobData {
         loadData();
 
         ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+        value=value.toLowerCase();
 
         for (HashMap<String, String> row : allJobs) {
 
             String aValue = row.get(column);
+
+            aValue=aValue.toLowerCase();
 
             if (aValue.contains(value)) {
                 jobs.add(row);
@@ -83,6 +88,36 @@ public class JobData {
 
         return jobs;
     }
+
+
+    /**
+     * To Do: to search all across all of the columns.
+     */
+    public static ArrayList<HashMap<String, String>> findByValue(String value) {
+
+        // load data, if not already loaded
+        loadData();
+
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+        value=value.toLowerCase();
+
+        for (HashMap<String, String> row : allJobs) {
+
+
+            Collection<String> rowValues = row.values();
+            String[] rowValuesArray = rowValues.toArray(new String[rowValues.size()]);
+            for (Integer i = 0; i < rowValuesArray.length; i++) {
+                if (rowValuesArray[i].toLowerCase().contains(value) && !jobs.contains(row)) {
+                    jobs.add(row);
+                }
+            }
+        }
+        return jobs;
+    }
+
+
+
+
 
     /**
      * Read in data from a CSV file and store it in a list
